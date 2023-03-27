@@ -28,4 +28,4 @@ Route::get('/showToken',[PersonalDataController::class,'showToken']);
 
 //PERSONAL DATA
 Route::post('/personalData_store',[PersonalDataController::class, 'store']);
-Route::put('/personalData_update/{id}',[PersonalDataController::class,'update']);
+Route::post('/personalData_update/{id}',[PersonalDataController::class,'update']);

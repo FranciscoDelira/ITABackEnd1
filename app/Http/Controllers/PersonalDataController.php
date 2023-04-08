@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Personaldata;
+use Illuminate\Support\Facades\Validator; //Import the Validator class
 
 class PersonalDataController extends Controller
 {
@@ -35,6 +36,7 @@ class PersonalDataController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = new Personaldata;
         $data->name=$request->name;
         $data->lastname=$request->lastname;

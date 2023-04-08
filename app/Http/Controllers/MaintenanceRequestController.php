@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Personaldata;
+use App\Models\Maintenancerequest;
 
-class PersonalDataController extends Controller
+class MaintenanceRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class PersonalDataController extends Controller
      */
     public function index()
     {
-        $data = PersonalData::all();
-        return $data;
+        $maintenance = Maintenancerequest::all();
+        return $maintenance;
     }
 
     /**
@@ -25,7 +25,7 @@ class PersonalDataController extends Controller
      */
     public function create()
     {
-       
+        //
     }
 
     /**
@@ -36,15 +36,13 @@ class PersonalDataController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new Personaldata;
-        $data->name=$request->name;
-        $data->lastname=$request->lastname;
-        $data->area=$request->area;
-        $data->signature=$request->signature->store('signatures');
-        $data->plantel=$request->plantel;
-        $data->save();
-
- //       return response()->json(['status'=>200], 200);
+        $maintenance = new Maintenancerequest;
+        $maintenance->department=$request->department;
+        $maintenance->requestDate=$request->requestDate;
+        $maintenance->personaldata_id=$request->personaldata_id;
+        $maintenance->requestDescription=$request->requestDescription;
+        $maintenance->status=$request->status;
+        $maintenance->save();
     }
 
     /**
@@ -55,8 +53,8 @@ class PersonalDataController extends Controller
      */
     public function show($id)
     {
-        $data=PersonalData::find($id);
-        return $data;
+        $maintenance=Maintenancerequest::find($id);
+        return $maintenance;
     }
 
     /**
@@ -79,24 +77,18 @@ class PersonalDataController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
-        $data=Personaldata::findOrFail($id);
+        $maintenance=Maintenancerequest::findOrFail($id);
 
+        $maintenance->department=$request->department;
+        $maintenance->requestDate=$request->requestDate;
+        $maintenance->personaldata_id=$request->personaldata_id;
+        $maintenance->requestDescription=$request->requestDescription;
+        $maintenance->status=$request->status;
         
-        $data->name=$request->name;
-        $data->lastname=$request->lastname;
-        $data->area=$request->area;
-        $data->signature=$request->signature;
-        $data->plantel=$request->plantel;
-        
-        $data->save(); 
+        $maintenance->save(); 
 
       
-        return $data;
-    }
-
-    public function showToken(){
-        return csrf_token();
+        return $maintenance;
     }
 
     /**
@@ -107,7 +99,7 @@ class PersonalDataController extends Controller
      */
     public function destroy($id)
     {
-        $data = PersonalData::find($id);
-        $data->delete();
+        $maintenance = Maintenancerequest::find($id);
+        $maintenance->delete();
     }
 }

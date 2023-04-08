@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -13,7 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        echo 'Hola';
+        $user = User::all();
+        return $user;
     }
 
     /**
@@ -34,7 +36,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        echo $request;
+        
     }
 
     /**
@@ -45,7 +47,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user=User::find($id);
+        return $user;
     }
 
     /**
@@ -68,7 +71,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user=User::findOrFail($id);
+        
+        $user->email=$request->email;
+        $user->password=bcrypt($request->password);
+        $user->personaldata_id=$request->personaldata_id;
+        $user->role=$request->role;
+       
+        $user->save(); 
+
+        return $user;
     }
 
     /**
@@ -79,7 +91,36 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user= User::find($id);
+        $user->delete();
+    }
+
+    
+    public function login(Request $request){
+        $credentials = [
+            'email' => $request->email, 
+            'password' => $request->password
+    ];
+
+    
+        if(auth()->attempt($credentials)){
+            $token=auth()->user()->createToken('LaravelAuthApp')->accessToken;
+            return response()->json(['token'=>$token, 'status'=>200,'user'=>auth()->user()]);
+        }else{
+            return response()->json(['error' => 'Unauthorised','status'=>401], 401);
+        }
+    }
+
+    public function register(Request $request){
+        $user = User::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'personaldata_id' => $request->personaldata_id,
+            'role' => $request->role
+        ]);
+
+        $token = $user->createToken('LaravelAuthApp')->accessToken;
+        return response()->json(['token'=>$token],200);
     }
     
 }

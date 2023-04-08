@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('maintenancerequests', function (Blueprint $table) {
             $table->id();
             $table->string('department');
-            $table->integer('folio');
+            $table->integer('folio'); //se eliminó la columna, se usará en su lugar el id
             $table->date('requestDate');
             $table->unsignedBigInteger('personaldata_id');
             $table->foreign('personaldata_id')->references('id')->on('personaldatas')->onDelete('cascade')->onUpdate('cascade');

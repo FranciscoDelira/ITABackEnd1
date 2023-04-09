@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('maintenancerequests', function (Blueprint $table) {
             $table->id();
             $table->string('department');
-            $table->integer('folio');
             $table->date('requestDate');
             $table->unsignedBigInteger('personaldata_id');
             $table->foreign('personaldata_id')->references('id')->on('personaldatas')->onDelete('cascade')->onUpdate('cascade');

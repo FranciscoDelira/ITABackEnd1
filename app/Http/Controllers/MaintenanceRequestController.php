@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Maintenancerequest;
+use Illuminate\Support\Facdes\Validator; //Import the validator class
+
 
 class MaintenanceRequestController extends Controller
 {
@@ -36,6 +38,7 @@ class MaintenanceRequestController extends Controller
      */
     public function store(Request $request)
     {
+        
         $maintenance = new Maintenancerequest;
         $maintenance->department=$request->department;
         $maintenance->requestDate=$request->requestDate;

@@ -82,6 +82,7 @@ class MaintenanceRequestController extends Controller
         $maintenance->evidence1 = $request->evidence1->store('MaintenanceEvidence');
         $maintenance->evidence2 = $request->evidence2->store('MaintenanceEvidence');
         $maintenance->evidence3 = $request->evidence3->store('MaintenanceEvidence');
+        $maintenance->save();
     }
 
     /**

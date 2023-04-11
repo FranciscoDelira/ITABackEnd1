@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Maintenancerequest;
-use Illuminate\Support\Facdes\Validator; //Import the validator class
+use Illuminate\Support\Facades\Validator; //Import the validator class
 
 
 class MaintenanceRequestController extends Controller
@@ -39,13 +39,49 @@ class MaintenanceRequestController extends Controller
     public function store(Request $request)
     {
         
+        $rules = [
+            'department' => 'required|string|min:20|max:255',
+            'requestDate' => 'required|date',
+            'personaldata_id' => 'required|exists:personaldatas,id',
+            'requestDescription' => 'required|string|min:20|max:255',
+            'status' => 'required|in:Pendiente, Por liberar, Liberada',
+            'evidence1' => 'file|mimes:jpeg,png,pdf',
+            'evidence2' => 'file|mimes:jpeg,png,pdf',
+            'evidence3' => 'file|mimes:jpeg,png,pdf'
+        ];
+    
+        // Mensajes de error personalizados
+        $messages = [
+            'required' => 'El :attribute es OBLIGATORIO',
+            'string' => 'El :attribute debe ser texto',
+            'min' => 'El :attribute debe de tener un minimo de 20 caracteres',
+            'max' => 'El :attribute debe de tener un máximo de 255 caracteres',
+            'date' => 'El :attribute solo acepta fechas',
+            'exists' => 'El :attribute no existe en la base de datos',
+            'in' => 'El :attribute no pertenece a los estados permitidos',
+            'file' => 'El :attribute debe ser una imagen',
+            'mimes' => 'El :attribute debe ser uno de los siguientes formatos: jpeg, png, pdf.'
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        // Verificar si hay errores de validación
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()
+            ], 400);
+        }
+
         $maintenance = new Maintenancerequest;
-        $maintenance->department=$request->department;
-        $maintenance->requestDate=$request->requestDate;
-        $maintenance->personaldata_id=$request->personaldata_id;
-        $maintenance->requestDescription=$request->requestDescription;
-        $maintenance->status=$request->status;
-        $maintenance->save();
+        $maintenance->department = $request->department;
+        $maintenance->requestDate = $request->requestDate;
+        $maintenance->personaldata_id = $request->personaldata_id;
+        $maintenance->requestDescription = $request->requestDescription;
+        $maintenance->status = $request->status;
+        $maintenance->evidence1 = $request->evidence1->store('MaintenanceEvidence');
+        $maintenance->evidence2 = $request->evidence2->store('MaintenanceEvidence');
+        $maintenance->evidence3 = $request->evidence3->store('MaintenanceEvidence');
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PassportAuthController;
 use App\Http\Controllers\PersonalDataController;
 use App\Http\Controllers\MaintenanceRequestController;
+use App\Http\Controllers\WorkOrderController;
 
 
 
@@ -50,3 +51,10 @@ Route::post('/maintenance_store',[MaintenanceRequestController::class, 'store'])
 Route::get('/maintenance_show/{id}',[MaintenanceRequestController::class, 'show']);
 Route::post('/maintenance_update/{id}',[MaintenanceRequestController::class,'update']);
 Route::delete('/maintenance_destroy/{id}',[MaintenanceRequestController::class, 'destroy']);
+
+//Work Order
+Route::get('/workorder_index',[WorkOrderController::class, 'index']);
+Route::post('/workorder_store',[WorkOrderController::class, 'store']);
+Route::get('/workorder_show/{id}',[WorkOrderController::class, 'show']);
+Route::post('/workorder_update/{id}',[WorkOrderController::class,'update']);
+Route::delete('/workorder_destroy/{id}',[WorkOrderController::class, 'destroy']);

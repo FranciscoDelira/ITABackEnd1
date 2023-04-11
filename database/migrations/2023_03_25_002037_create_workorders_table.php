@@ -15,20 +15,21 @@ return new class extends Migration
     {
         Schema::create('workorders', function (Blueprint $table) {
             $table->id();
-            $table->integer('orderFolio');
-            $table->string('password');
-            $table->enum('maintenanceType',['Interno','Externo']);
-            $table->enum('serviceType',['Eléctrico','Plomería','Herrería','Pintura','Obra Civil','Otro']);
+            $table->enum('maintenanceType',['Interno','Externo'])->nullable();
+            $table->enum('serviceType',['Eléctrico','Plomería','Herrería','Pintura','Obra Civil','Otro'])->nullable();
             $table->string('employeeName');
-            $table->date('maintenanceDate');
-            $table->string('jobDescription');
+            $table->date('maintenanceDate')->nullable();
+            $table->string('jobDescription')->nullable();
+            $table->string('evidence1')->nullable();
+            $table->string('evidence2')->nullable();
+            $table->string('evidence3')->nullable();
             $table->unsignedBigInteger('maintenancerequest_id');
             $table->foreign('maintenancerequest_id')->references('id')->on('maintenancerequests')->onDelete('cascade')->onUpdate('cascade');           
-            $table->boolean('released');
-            $table->date('releasedDate');
-            $table->boolean('approved');
-            $table->string('approversName');
-            $table->date('dateApproved');
+            $table->boolean('released')->nullable();
+            $table->date('releasedDate')->nullable();
+            $table->boolean('approved')->nullable();
+            $table->string('approversName')->nullable();
+            $table->date('dateApproved')->nullable();
             $table->timestamps();
         });
     }

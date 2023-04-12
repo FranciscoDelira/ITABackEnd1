@@ -50,7 +50,6 @@ class MaintenanceRequestController extends Controller
             'evidence3' => 'file|mimes:jpeg,png,pdf'
         ];
     
-        // Mensajes de error personalizados
         $messages = [
             'required' => 'El :attribute es OBLIGATORIO',
             'string' => 'El :attribute debe ser texto',
@@ -117,6 +116,39 @@ class MaintenanceRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'department' => 'required|string|min:20|max:255',
+            'requestDate' => 'required|date',
+            'personaldata_id' => 'required|exists:personaldatas,id',
+            'requestDescription' => 'required|string|min:20|max:255',
+            'status' => 'required|in:Pendiente, Por liberar, Liberada',
+            'evidence1' => 'nullable|file|mimes:jpeg,png',
+            'evidence2' => 'nullable|file|mimes:jpeg,png',
+            'evidence3' => 'nullable|file|mimes:jpeg,png'
+        ];
+    
+        $messages = [
+            'required' => 'El :attribute es OBLIGATORIO',
+            'string' => 'El :attribute debe ser texto',
+            'min' => 'El :attribute debe de tener un minimo de 20 caracteres',
+            'max' => 'El :attribute debe de tener un máximo de 255 caracteres',
+            'date' => 'El :attribute solo acepta fechas',
+            'exists' => 'El :attribute no existe en la base de datos',
+            'in' => 'El :attribute no pertenece a los estados permitidos',
+            'file' => 'El :attribute debe ser una imagen',
+            'mimes' => 'El :attribute debe ser uno de los siguientes formatos: jpeg, png, pdf.'
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        // Verificar si hay errores de validación
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()
+            ], 400);
+        }
+
         $maintenance=Maintenancerequest::findOrFail($id);
 
         $maintenance->department=$request->department;

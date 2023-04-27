@@ -77,7 +77,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'required|min:6',
             'personaldata_id' => 'required|exists:personaldatas,id',
-            'role' => 'required|in:Jefe Departamento, Mantenimiento',
+            'role' => 'required|in:Jefe Departamento,Mantenimiento',
         ];
 
         $messages = [

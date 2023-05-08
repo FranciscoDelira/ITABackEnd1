@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Personaldata;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator; //Import the Validator class
 
 class PersonalDataController extends Controller
@@ -110,6 +111,7 @@ class PersonalDataController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.

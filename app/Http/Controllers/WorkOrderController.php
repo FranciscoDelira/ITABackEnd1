@@ -217,4 +217,47 @@ class WorkOrderController extends Controller
         $workorder = WorkOrder::find($id);
         $workorder->delete();
     }
+
+    public function showApproved()
+    {
+        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->get([
+            'workorders.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.area', 
+            'personaldatas.name', 
+            'maintenancerequests.requestDescription',
+            'workorders.releasedDate',
+            'workorders.maintenanceDate',
+            'workorders.dateApproved',
+            'workorders.employeeName', 
+            'workorders.evidence1', 
+            'workorders.evidence2', 
+            'workorders.evidence3', 
+            'maintenancerequests.status'
+        ]);
+        return $workorder;
+    }
+
+    public function showRequestHistory()
+    {
+        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.name', 
+            'maintenancerequests.department', 
+            'maintenancerequests.requestDescription', 
+            'workorders.releasedDate',
+            'workorders.dateApproved',
+            'workorders.employeeName',
+            'workorders.evidence1', 
+            'workorders.evidence2', 
+            'workorders.evidence3', 
+            'maintenancerequests.status'
+            ]);
+        return $workorder;
+    }
 }

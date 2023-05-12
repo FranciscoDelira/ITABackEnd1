@@ -61,3 +61,5 @@ Route::post('/workorder_store',[WorkOrderController::class, 'store']);
 Route::get('/workorder_show/{id}',[WorkOrderController::class, 'show']);
 Route::post('/workorder_update/{id}',[WorkOrderController::class,'update']);
 Route::delete('/workorder_destroy/{id}',[WorkOrderController::class, 'destroy']);
+Route::get('/workorder_showApproved',[WorkOrderController::class, 'showApproved']);
+Route::get('/workorder_showRequestHistory',[WorkOrderController::class, 'showRequestHistory']);

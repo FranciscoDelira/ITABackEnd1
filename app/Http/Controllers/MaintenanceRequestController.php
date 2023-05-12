@@ -174,4 +174,61 @@ class MaintenanceRequestController extends Controller
         $maintenance = Maintenancerequest::find($id);
         $maintenance->delete();
     }
+
+    public function showRelease()
+    {
+        $maintenance = Maintenancerequest::join('workorders', 'workorders.id', '=', 'maintenancerequest_id')
+        ->get([
+            'workorders.id', 
+            'workorders.maintenanceType', 
+            'workorders.serviceType', 
+            'workorders.employeeName', 
+            'workorders.maintenanceDate', 
+            'workorders.jobDescription', 
+            'maintenancerequests.evidence1', 
+            'maintenancerequests.evidence2', 
+            'maintenancerequests.evidence3',
+            'maintenancerequests.status'
+        ]);
+        return $maintenance;
+    }
+
+    public function showEarring()
+    {
+        $maintenance = Maintenancerequest::join(
+            'personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id'
+            )
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.area',
+            'personaldatas.name', 
+            'maintenancerequests.requestDescription', 
+            'maintenancerequests.evidence1', 
+            'maintenancerequests.evidence2', 
+            'maintenancerequests.evidence3', 
+            'maintenancerequests.status'
+    ]);
+        return $maintenance;
+    }
+
+    public function showActiveRequest()
+    {
+        $maintenance = Maintenancerequest::join(
+            'personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id'
+            )
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.name', 
+            'maintenancerequests.department', 
+            'maintenancerequests.requestDescription', 
+            'maintenancerequests.evidence1', 
+            'maintenancerequests.evidence2', 
+            'maintenancerequests.evidence3', 
+            'personaldatas.signature',
+            'maintenancerequests.status'
+            ]);
+        return $maintenance;
+    }
 }

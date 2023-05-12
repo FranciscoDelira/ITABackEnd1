@@ -51,6 +51,9 @@ Route::post('/maintenance_store',[MaintenanceRequestController::class, 'store'])
 Route::get('/maintenance_show/{id}',[MaintenanceRequestController::class, 'show']);
 Route::post('/maintenance_update/{id}',[MaintenanceRequestController::class,'update']);
 Route::delete('/maintenance_destroy/{id}',[MaintenanceRequestController::class, 'destroy']);
+Route::get('/maintenance_showEarring',[MaintenanceRequestController::class, 'showEarring']);
+Route::get('/maintenance_showRelease',[MaintenanceRequestController::class, 'showRelease']);
+Route::get('/maintenance_showActiveRequest',[MaintenanceRequestController::class, 'showActiveRequest']);
 
 //Work Order
 Route::get('/workorder_index',[WorkOrderController::class, 'index']);

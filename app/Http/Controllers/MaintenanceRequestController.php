@@ -175,6 +175,15 @@ class MaintenanceRequestController extends Controller
         $maintenance->delete();
     }
 
+    public function showMaintenanceRequestActive($personalData)
+    {
+        $maintenance= \DB::table('maintenancerequests')
+        ->where([['personaldata_id', $personalData],['status','Pendiente']])
+        ->orWhere([['personaldata_id', $personalData],['status','Por liberar']])
+        ->get();
+        return $maintenance;
+    }
+
     public function showRelease()
     {
         $maintenance = Maintenancerequest::join('workorders', 'workorders.id', '=', 'maintenancerequest_id')

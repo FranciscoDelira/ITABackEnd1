@@ -40,26 +40,26 @@ class MaintenanceRequestController extends Controller
     {
         
         $rules = [
-            'department' => 'required|string|min:20|max:255',
+            'department' => 'required|string|min:8|max:255',
             'requestDate' => 'required|date',
             'personaldata_id' => 'required|exists:personaldatas,id',
             'requestDescription' => 'required|string|min:20|max:255',
-            'status' => 'required|in:Pendiente, Por liberar, Liberada',
-            'evidence1' => 'file|mimes:jpeg,png,pdf',
-            'evidence2' => 'file|mimes:jpeg,png,pdf',
-            'evidence3' => 'file|mimes:jpeg,png,pdf'
+            'status' => 'required|in:PENDIENTE,POR LIBERAR,LIBERADA',
+            'evidence1' => 'file|mimes:jpeg,png',
+            'evidence2' => 'file|mimes:jpeg,png',
+            'evidence3' => 'file|mimes:jpeg,png'
         ];
     
         $messages = [
             'required' => 'El :attribute es OBLIGATORIO',
             'string' => 'El :attribute debe ser texto',
-            'min' => 'El :attribute debe de tener un minimo de 20 caracteres',
+            'min' => 'El :attribute debe de tener un minimo de 8 caracteres',
             'max' => 'El :attribute debe de tener un máximo de 255 caracteres',
             'date' => 'El :attribute solo acepta fechas',
             'exists' => 'El :attribute no existe en la base de datos',
             'in' => 'El :attribute no pertenece a los estados permitidos',
             'file' => 'El :attribute debe ser una imagen',
-            'mimes' => 'El :attribute debe ser uno de los siguientes formatos: jpeg, png, pdf.'
+            'mimes' => 'El :attribute debe ser uno de los siguientes formatos: jpeg, png.'
         ];
     
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -78,9 +78,19 @@ class MaintenanceRequestController extends Controller
         $maintenance->personaldata_id = $request->personaldata_id;
         $maintenance->requestDescription = $request->requestDescription;
         $maintenance->status = $request->status;
-        $maintenance->evidence1 = $request->evidence1->store('MaintenanceEvidence');
-        $maintenance->evidence2 = $request->evidence2->store('MaintenanceEvidence');
-        $maintenance->evidence3 = $request->evidence3->store('MaintenanceEvidence');
+        if ($request->hasFile('evidence1')){
+            $maintenance->evidence1 = $request->file('evidence1')->store('MaintenanceEvidence');
+        }
+        if ($request->hasFile('evidence2')) {
+            $maintenance->evidence2 = $request->file('evidence2')->store('MaintenanceEvidence');
+        }
+    
+        if ($request->hasFile('evidence3')) {
+            $maintenance->evidence3 = $request->file('evidence3')->store('MaintenanceEvidence');
+        }
+        //$maintenance->evidence1 = $request->evidence1->store('MaintenanceEvidence');
+        //$maintenance->evidence2 = $request->evidence2->store('MaintenanceEvidence');
+        //$maintenance->evidence3 = $request->evidence3->store('MaintenanceEvidence');
         $maintenance->save();
     }
 

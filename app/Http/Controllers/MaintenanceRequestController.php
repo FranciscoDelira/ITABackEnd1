@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Maintenancerequest;
 use Illuminate\Support\Facades\Validator; //Import the validator class
 
@@ -28,6 +29,45 @@ class MaintenanceRequestController extends Controller
     public function create()
     {
         //
+    }
+
+    public function showCombinedData($id)
+    {
+        $data = $this->getCombinedData($id);
+        return response()->json($data);
+    }
+
+
+    function getCombinedData($id) {
+        $data = DB::table('maintenancerequests')
+        ->join('workorders', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->select(
+            'maintenancerequests.id',
+            'maintenancerequests.department',
+            'maintenancerequests.requestDate',
+            'maintenancerequests.requestDescription',
+            'maintenancerequests.status',
+            'maintenancerequests.evidence1 AS MR_Evidence1',
+            'maintenancerequests.evidence2 AS MR_Evidence2',
+            'maintenancerequests.evidence3 AS MR_Evidence3',
+            'workorders.maintenanceType',
+            'workorders.serviceType',
+            'workorders.employeeName',
+            'workorders.maintenanceDate',
+            'workorders.jobDescription',
+            'workorders.evidence1 AS WO_Evidence1',
+            'workorders.evidence2 AS WO_Evidence2',
+            'workorders.evidence3 AS WO_Evidence3',
+            'workorders.released',
+            'workorders.releasedDate',
+            'workorders.approved',
+            'workorders.approversName',
+            'workorders.dateApproved'
+        )
+        ->where('maintenancerequests.id', $id)
+        ->first();
+
+    return $data;
     }
 
     /**

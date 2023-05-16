@@ -188,8 +188,8 @@ class MaintenanceRequestController extends Controller
     public function showMaintenanceRequestActive($personalData)
     {
         $maintenance= \DB::table('maintenancerequests')
-        ->where([['personaldata_id', $personalData],['status','Pendiente']])
-        ->orWhere([['personaldata_id', $personalData],['status','Por liberar']])
+        ->where([['personaldata_id', $personalData],['status','PENDIENTE']])
+        ->orWhere([['personaldata_id', $personalData],['status','POR LIBERAR']])
         ->get();
         return $maintenance;
     }

@@ -194,6 +194,14 @@ class MaintenanceRequestController extends Controller
         return $maintenance;
     }
 
+    public function showMaintenanceRequestReleased($personalData)
+    {
+        $maintenance= \DB::table('maintenancerequests')
+        ->where([['personaldata_id', $personalData],['status','Liberada']])
+        ->get();
+        return $maintenance;
+    }
+
     public function showRelease()
     {
         $maintenance = Maintenancerequest::join('workorders', 'workorders.id', '=', 'maintenancerequest_id')

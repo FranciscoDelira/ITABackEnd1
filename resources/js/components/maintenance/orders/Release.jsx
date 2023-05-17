@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import IconEarringsUser from '/src/IconsOrders/IconEarringsUser.png';
 import IconReleasedUser from '/src/IconsOrders/IconReleasedUser.png';
@@ -106,13 +107,13 @@ const Release = () => {
                             <td> <img src={release.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {release.status} </td>
                             <td> <Link
-                                to={`${active.id}`}
+                                to={`${release.id}`}
                                 className="btn btn-warning"
                             >
                                 Aprobar
                             </Link>
                                 <button
-                                    onClick={() => deleteApproveds(active.id)}
+                                    onClick={() => deleteApproveds(release.id)}
                                     className="btn btn-danger"
                                 >
                                     Eliminar

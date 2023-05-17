@@ -74,7 +74,7 @@ function Login() {
     const formData = new FormData();
     formData.append("email", formValue.email)
     formData.append("password", formValue.password)
-    axios.post('http://localhost/ITAFrontEndWeb/public/api/login',
+    axios.post('http://localhost/ITABackEnd/public/api/login',
       formData,
       {
         headers: {
@@ -86,7 +86,7 @@ function Login() {
 
       localStorage.setItem("token", response.data.access_token)
 
-      navigate({pathname: "/ITAFrontEndWeb/public/home", state: {token: response.data.access_token}})
+      navigate({pathname: "/ITABackEnd/public/home", state: {token: response.data.access_token}})
 
       console.log('response:');
       console.log(response);

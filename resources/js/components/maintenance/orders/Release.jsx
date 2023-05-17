@@ -21,7 +21,7 @@ const Release = () => {
     }, [])
 
     const getAllReleases = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workoder_showRelease');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workoder_showRelease');
         setReleases(response.data);
         console.log(response.data);
     }

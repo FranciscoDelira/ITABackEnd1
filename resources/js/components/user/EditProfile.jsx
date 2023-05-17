@@ -95,8 +95,8 @@ function EditProfile() {
   const [signature, setSignature] = useState('');
 
   const getData = async () => {
-    const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/user_show/' + 1)//id del usuario en sesion
-    const responseTwo = await axios.get('http://localhost/ITAFrontEndWeb/public/api/personalData_show/' + response.data.personaldata_id)
+    const response = await axios.get('http://localhost/ITABackEnd/public/api/user_show/' + 1)//id del usuario en sesion
+    const responseTwo = await axios.get('http://localhost/ITABackEnd/public/api/personalData_show/' + response.data.personaldata_id)
     console.log(response, responseTwo)
     setEmail(response.data.email)
     setPassword(response.data.password)
@@ -132,7 +132,7 @@ function EditProfile() {
 
 
     //hacer update de tabla user
-    axios.post(`http://localhost/ITAFrontEndWeb/public/api/personalData_updateProfile/${1}`, formData, {
+    axios.post(`http://localhost/ITABackEnd/public/api/personalData_updateProfile/${1}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
       }

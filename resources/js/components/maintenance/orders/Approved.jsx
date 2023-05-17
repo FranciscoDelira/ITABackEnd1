@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-const ruta = "http://localhost/ITAFrontEndWeb/api";
+const ruta = "http://localhost/ITABackEnd/api";
 
 const Approved = () => {
 
@@ -25,7 +25,7 @@ const Approved = () => {
     }, []);
 
     const getAllApproveds = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showApproved');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showApproved');
         setApproveds(response.data);
         console.log(response.data);
     };

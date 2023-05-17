@@ -24,7 +24,7 @@ const ActiveRequests = () => {
     }, [])
 
     const getAllActives = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showActiveRequest');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/maintenance_showActiveRequest');
         setActives(response.data);
         console.log(response.data);
     }
@@ -103,7 +103,7 @@ const ActiveRequests = () => {
                             <td> {active.status} </td>
                             <td>
                                 <Link
-                                    to={`http://localhost/ITAFrontEndWeb/public/newOrder/${active.id}`}
+                                    to={`http://localhost/ITABackEnd/public/newOrder/${active.id}`}
                                     className="btn btn-warning"
                                 >
                                     Orden

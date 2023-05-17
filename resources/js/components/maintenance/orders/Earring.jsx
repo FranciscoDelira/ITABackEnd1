@@ -24,7 +24,7 @@ const Earring = () => {
     }, [])
 
     const getAllEarrings = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showEarring');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/maintenance_showEarring');
         setEarrings(response.data);
         console.log(response.data);
     }

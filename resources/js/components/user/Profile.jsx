@@ -80,8 +80,8 @@ function Profile() {
   const [password, setPassword] = useState('');
 
   const postData = async () => {
-    const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/personalData_show/' + 7)
-    const response2 = await axios.get('http://localhost/ITAFrontEndWeb/public/api/user_show/' + response.data.personaldata_id)
+    const response = await axios.get('http://localhost/ITABackEnd/public/api/personalData_show/' + 7)
+    const response2 = await axios.get('http://localhost/ITABackEnd/public/api/user_show/' + response.data.personaldata_id)
 
     setName(response.data.name)
     setLastName(response.data.lastname)

@@ -23,7 +23,7 @@ const RequestHistory = () => {
     }, [])
 
     const getAllRequestsHistory = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showRequestHistory');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showRequestHistory');
         setRequestsHistory(response.data);
         console.log(response.data);
     }

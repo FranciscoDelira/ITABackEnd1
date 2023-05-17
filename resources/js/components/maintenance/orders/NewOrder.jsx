@@ -117,8 +117,8 @@ function NewOrder() {
   const { id } = useParams();
 
   const getData = async () => {
-    const response = await axios.get(`http://localhost/ITAFrontEndWeb/public/api/maintenance_show/${id}`)
-    const response2 = await axios.get('http://localhost/ITAFrontEndWeb/public/api/personalData_show/' + response.data.personaldata_id)
+    const response = await axios.get(`http://localhost/ITABackEnd/public/api/maintenance_show/${id}`)
+    const response2 = await axios.get('http://localhost/ITABackEnd/public/api/personalData_show/' + response.data.personaldata_id)
 
     console.log(response, response2)
     setID(response.data.id)
@@ -144,7 +144,7 @@ function NewOrder() {
     formData.append('maintenanceDate', maintenanceDate)
 
 
-    axios.post('http://localhost/ITAFrontEndWeb/public/api/personalData_store', formData, {
+    axios.post('http://localhost/ITABackEnd/public/api/personalData_store', formData, {
       headers: {
         'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
       }
@@ -264,7 +264,7 @@ function NewOrder() {
 
             <Form.Group className="row">
               <Col>
-                <Link className="btn btn-danger" to={`http://localhost/ITAFrontEndWeb/public/newOrder/${active.id}`}>Cancelar</Link>
+                <Link className="btn btn-danger" to={`http://localhost/ITABackEnd/public/newOrder/${active.id}`}>Cancelar</Link>
               </Col>
               <Col>
                 <Button>Aceptar</Button>

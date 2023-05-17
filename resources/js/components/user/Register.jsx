@@ -112,7 +112,7 @@ function Register() {
     formData.append('role', role)
 
 
-    axios.post('http://localhost/ITAFrontEndWeb/public/api/personalData_registerPersonalUser', formData, {
+    axios.post('http://localhost/ITABackEnd/public/api/personalData_registerPersonalUser', formData, {
       headers: {
         'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
       }

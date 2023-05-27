@@ -218,7 +218,7 @@ class WorkOrderController extends Controller
         $workorder->delete();
     }
 
-    public function showApproved()
+    /*public function showApproved()
     {
         $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
         ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
@@ -238,7 +238,7 @@ class WorkOrderController extends Controller
             'maintenancerequests.status'
         ]);
         return $workorder;
-    }
+    }*/
 
     public function showRequestHistory()
     {
@@ -274,6 +274,54 @@ class WorkOrderController extends Controller
     ->where('released', '=', '1')
     ->get([
         'workorders.id',
+        'workorders.maintenanceType',
+        'workorders.serviceType',
+        'workorders.employeeName',
+        'workorders.maintenanceDate',
+        'workorders.jobDescription',
+        'workorders.evidence1',
+        'workorders.evidence2',
+        'workorders.evidence3',
+        'maintenancerequests.status'
+    ]);
+
+    return $workorders;
+    }
+
+    public function showApproved(){
+        
+    $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->where('maintenancerequests.status', 'Liberada')
+        ->get([
+            'workorders.id',
+            'maintenancerequests.requestDate',
+            'personaldatas.area',
+            'personaldatas.name',
+            'maintenancerequests.requestDescription',
+            'workorders.employeeName',
+            'workorders.evidence1',
+            'workorders.evidence2',
+            'workorders.evidence3'
+        ]);
+
+        return $workorders;
+    
+    }
+
+    /*public function showRelease()
+    {
+        
+    $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    ->where('maintenancerequests.status', '=', 'Liberada')
+    ->where('workorders.released', '=', '0')
+    ->update(['released' => 1]);    
+
+    $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+    ->where('released', '=', '1')
+    ->get([
+        'workorders.id',
         'maintenancerequests.requestDate',
         'personaldatas.area',
         'personaldatas.name',
@@ -287,5 +335,8 @@ class WorkOrderController extends Controller
         'workorders.evidence3',
         'maintenancerequests.status'
     ]);
-}
+}*/
+
+
+
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 import IconEarringsUser from '/src/IconsOrders/IconEarringsUser.png';
 import IconReleasedUser from '/src/IconsOrders/IconReleasedUser.png';
@@ -11,23 +10,50 @@ import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import { Button } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 const Release = () => {
 
     const [releases, setReleases] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    //const [id, setID] = useState("");
+
+    /*const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+
+
+        formData.append('id', id)
+        console.log(id)
+
+
+
+        axios.post('http://localhost/ITAFrontEndWeb/public/api/workorder_showApproved', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
+            }
+        })
+            .catch((error) => {
+                console.log(error);
+            });
+    }*/
 
     useEffect(() => {
         getAllReleases();
     }, [])
 
     const getAllReleases = async () => {
-        const response = await axios.get('http://localhost/ITABackEnd/public/api/workoder_showRelease');
+
+
+
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showRelease');
         setReleases(response.data);
         console.log(response.data);
+
     }
 
-    const filteredReleases = releases.filter((release) => {
+    /*const filteredReleases = releases.filter((release) => {
         if (searchTerm === "") {
             return release;
         } else if (
@@ -39,7 +65,7 @@ const Release = () => {
         ) {
             return release;
         }
-    });
+    });*/
 
     return (
         <>
@@ -94,7 +120,7 @@ const Release = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredReleases.map((release) => (
+                    {releases.map((release) => (
                         <tr key={release.id}>
                             <td> {release.id} </td>
                             <td> {release.maintenanceType} </td>
@@ -106,18 +132,27 @@ const Release = () => {
                             <td> <img src={release.evidence2} alt="signature" width={100} height={100} /> </td>
                             <td> <img src={release.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {release.status} </td>
-                            <td> <Link
-                                to={`${release.id}`}
+                            <td> {/*<Button
+                                onClick={() => {
+                                    setID({id: release.id});
+                                    handleSubmit();
+                                    }}
                                 className="btn btn-warning"
                             >
                                 Aprobar
-                            </Link>
-                                <button
+                            </Button>*/}
+                                <Link
+                                    to={`http://localhost/ITAFrontEndWeb/public/approved`}
+                                    className="btn btn-warning"
+                                >
+                                    Aprobar
+                                </Link>
+                                <Button
                                     onClick={() => deleteApproveds(release.id)}
                                     className="btn btn-danger"
                                 >
                                     Eliminar
-                                </button>
+                                </Button>
                             </td>
                         </tr>
                     ))}

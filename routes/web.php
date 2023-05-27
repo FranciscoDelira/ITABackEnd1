@@ -16,9 +16,12 @@ use App\Http\Controllers\PersonalDataController;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
+
+Route::view('{path?}', 'welcome')
+    ->where('path', '.*');
 
 Route::get('/showToken',[PersonalDataController::class,'showToken']);
 

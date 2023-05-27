@@ -12,7 +12,7 @@ export default function App(){
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/Proyecto_1/public/" element={<NavBar />} >
+                    <Route path="/ITABackEnd/public/" element={<NavBar />} >
                         <Route index element={<Example />} />
                         <Route path="example" element={<Example />} />
                         <Route path="first" element={<First />} />

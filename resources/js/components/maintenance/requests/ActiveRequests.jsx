@@ -103,7 +103,7 @@ const ActiveRequests = () => {
                             <td> {active.status} </td>
                             <td>
                                 <Link
-                                    to={`http://localhost/ITABackEnd/public/newOrder/${active.id}`}
+                                    to={`http://localhost/ITABackEnd/public/NewOrder/${active.id}`}
                                     className="btn btn-warning"
                                 >
                                     Orden

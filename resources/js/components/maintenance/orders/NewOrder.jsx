@@ -2,7 +2,6 @@ import { Nav } from 'react-bootstrap';
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Menu from '../../Menu';
-import Footer from '../../Footer';
 import Stack from 'react-bootstrap/Stack';
 import IconReleasedUser from '/src/IconsOrders/CreateNewOrder.png';
 import Col from 'react-bootstrap/Col';

@@ -230,13 +230,13 @@ class WorkOrderController extends Controller
 
     $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
     ->join('personaldatas', 'personaldatas.id', '=', 'workorders.personaldata_id')
-    ->join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
     
     ->where('released', '1')
     ->get([
         'workorders.id',
         'workorders.maintenanceType',
         'workorders.serviceType',
+        'workorders.personaldata_id',
         'personaldatas.name',
         'workorders.maintenanceDate',
         'workorders.jobDescription',

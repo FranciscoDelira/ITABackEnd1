@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\WorkOrder;
+use App\Models\Maintenancerequests;
 use Illuminate\Support\Facades\Validator; //Import the validator class
 
 
@@ -218,65 +219,25 @@ class WorkOrderController extends Controller
         $workorder->delete();
     }
 
-    /*public function showApproved()
-    {
-        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
-        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
-        ->get([
-            'workorders.id', 
-            'maintenancerequests.requestDate', 
-            'personaldatas.area', 
-            'personaldatas.name', 
-            'maintenancerequests.requestDescription',
-            'workorders.releasedDate',
-            'workorders.maintenanceDate',
-            'workorders.dateApproved',
-            'workorders.employeeName', 
-            'workorders.evidence1', 
-            'workorders.evidence2', 
-            'workorders.evidence3', 
-            'maintenancerequests.status'
-        ]);
-        return $workorder;
-    }*/
-
-    public function showRequestHistory()
-    {
-        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
-        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
-        ->get([
-            'maintenancerequests.id', 
-            'maintenancerequests.requestDate', 
-            'personaldatas.name', 
-            'maintenancerequests.department', 
-            'maintenancerequests.requestDescription', 
-            'workorders.releasedDate',
-            'workorders.dateApproved',
-            'workorders.employeeName',
-            'workorders.evidence1', 
-            'workorders.evidence2', 
-            'workorders.evidence3', 
-            'maintenancerequests.status'
-            ]);
-        return $workorder;
-    }
 
     public function showRelease()
     {
         
     $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
     ->where('maintenancerequests.status', '=', 'Liberada')
-    ->where('workorders.released', '=', '0')
+    
     ->update(['released' => 1]);    
 
     $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
-    ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
-    ->where('released', '=', '1')
+    ->join('personaldatas', 'personaldatas.id', '=', 'workorders.personaldata_id')
+    ->join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    
+    ->where('released', '1')
     ->get([
         'workorders.id',
         'workorders.maintenanceType',
         'workorders.serviceType',
-        'workorders.employeeName',
+        'personaldatas.name',
         'workorders.maintenanceDate',
         'workorders.jobDescription',
         'workorders.evidence1',
@@ -288,8 +249,65 @@ class WorkOrderController extends Controller
     return $workorders;
     }
 
-    public function showApproved(){
+    public function approvedOrder(Request $request, $id){
+        /*$workorder = WorkOrder::where('released', '=', '1')
+        ->update([
+            'workorders.dataApproved' => $request->dateApproved,
+            'approved' => 1,
+        ]);*/
+
+        $rules = [
+            'approved' => 'nullable|in:0,1',
+            'approversName' => 'nullable|string|max:255|min:3',
+            'dateApproved' => 'nullable|date'
+        ];
+
+        $messages = [
+            
+            'in' => 'El :attribute no pertenece a las categorías permitidas',
+            'string' => 'El :attribute debe ser una cadena de caracteres.',
+            'date' => 'El :attribute debe ser una fecha válida.',
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         
+        $workorder=WorkOrder::findOrFail($id);
+        $workorder->approved=1;
+        $workorder->approversName=$request->approversName;
+        $workorder->dateApproved=$request->dateApproved;
+        $workorder->save();
+    }
+
+    public function showApproved(){
+        /*$workorder = WorkOrder::where('workorders.approved', '=', '0')
+        ->where('workorders.id', '=', $request->id)
+        ->update(['approved' => 1]);
+
+        $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->where('approved', '=', '1')
+        ->get([
+        'workorders.id',
+        'maintenancerequests.requestDate',
+        'personaldatas.area',
+        'personaldatas.name',
+        'maintenancerequests.requestDescription',
+        'workorders.releasedDate',
+        'workorders.maintenanceDate',
+        'workorders.dateApproved',
+        'workorders.employeeName',
+        'workorders.evidence1',
+        'workorders.evidence2',
+        'workorders.evidence3',
+        'maintenancerequests.status'
+    ]);*/
+
+
     $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
         ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
         ->where('maintenancerequests.status', 'Liberada')
@@ -309,34 +327,122 @@ class WorkOrderController extends Controller
     
     }
 
+    public function showRequestHistory()
+    {
+        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->where('maintenancerequests.status', 'Liberada')
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.name', 
+            'maintenancerequests.department', 
+            'maintenancerequests.requestDescription', 
+            'workorders.releasedDate',
+            'workorders.dateApproved',
+            'workorders.employeeName',
+            'workorders.evidence1', 
+            'workorders.evidence2', 
+            'workorders.evidence3', 
+            'maintenancerequests.status'
+            ]);
+        return $workorder;
+    }
+
     /*public function showRelease()
     {
-        
-    $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
-    ->where('maintenancerequests.status', '=', 'Liberada')
-    ->where('workorders.released', '=', '0')
-    ->update(['released' => 1]);    
+        $maintenance = Maintenancerequest::join('workorders', 'workorders.id', '=', 'maintenancerequest_id')
+        ->where('workorders.released', 'true')
+        ->get([
+            'workorders.id', 
+            'workorders.maintenanceType', 
+            'workorders.serviceType', 
+            'workorders.employeeName', 
+            'workorders.maintenanceDate', 
+            'workorders.jobDescription', 
+            'maintenancerequests.evidence1', 
+            'maintenancerequests.evidence2', 
+            'maintenancerequests.evidence3',
+            'maintenancerequests.status'
+        ]);
+        return $maintenance;
+    }*/
 
-    $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
-    ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
-    ->where('released', '=', '1')
-    ->get([
-        'workorders.id',
-        'maintenancerequests.requestDate',
-        'personaldatas.area',
-        'personaldatas.name',
-        'maintenancerequests.requestDescription',
-        'workorders.releasedDate',
-        'workorders.maintenanceDate',
-        'workorders.dateApproved',
-        'workorders.employeeName',
-        'workorders.evidence1',
-        'workorders.evidence2',
-        'workorders.evidence3',
-        'maintenancerequests.status'
-    ]);
+
+    /*/public function showRelease()
+    //{
+       
+
+    DB::table('workorders')
+    ->where('maintenancerequest_id', DB::raw('(SELECT id FROM maintenancerequests WHERE status = "Liberada")'))
+    ->update(['released' => 1]);
+
+    $workorders = DB::table('workorders')
+    ->join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    ->select('workorders.*')
+    ->where('workorders.released', '=', 1)
+    ->get();
+
+    return $workorders;
 }*/
 
+    public function showEarring()
+    {
+        $workorder = WorkOrder::
+        join('personaldatas', 'personaldatas.id', '=', 'workorders.personaldata_id')
+        ->join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->where('workorders.released', '0')
+        ->where('workorders.approved', '0')
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.area',
+            'personaldatas.name', 
+            'maintenancerequests.requestDescription', 
+            'maintenancerequests.evidence1', 
+            'maintenancerequests.evidence2', 
+            'maintenancerequests.evidence3', 
+            'maintenancerequests.status'
+    ]);
+        return $workorder;
+    }
 
+    public function newOrder(Request $request){
+
+        $rules = [
+            'maintenanceType' => 'required|in:Interno',
+            'serviceType' => 'in:Eléctrico,Plomería,Herrería,Pintura,Obra Civil,Otro',
+            'personaldata_id' => 'required|exists:personaldatas,id',
+            'maintenanceDate' => 'nullable|date',
+            'maintenancerequest_id' => 'required|exists:maintenancerequests,id',
+        ];
+
+        $messages = [
+            'required' => 'El :attribute es OBLIGATORIO.',
+            'in' => 'El :attribute no pertenece a las categorías permitidas',
+            'string' => 'El :attribute debe ser una cadena de caracteres.',
+            'min' => 'El :attribute debe de tener más de :min caracteres',
+            'date' => 'El :attribute debe ser una fecha válida.',
+            'max' => 'El archivo :attribute no debe exceder los :max caracteres',
+            'exists' => 'El folio de la solictud no existe en el Sistema'
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $workorder = new WorkOrder;
+        $workorder->maintenanceType=$request->maintenanceType;
+        $workorder->serviceType=$request->serviceType;
+        $workorder->personaldata_id=$request->personaldata_id;
+        $workorder->maintenanceDate=$request->maintenanceDate;
+        $workorder->maintenancerequest_id=$request->maintenancerequest_id;
+        $workorder->approved = 0;
+        $workorder->released = 0;
+        $workorder->save();
+
+    }
 
 }

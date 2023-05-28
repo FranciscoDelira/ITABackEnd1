@@ -14,6 +14,6 @@ class Workorder extends Model
     }
 
     public function personalData(){
-        return $this->belongsTo(Personaldata::class);
+        return $this->belongsTo(PersonalData::class);
     }
 }

@@ -13,25 +13,33 @@ import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-const ruta = "http://localhost/ITAFrontEndWeb/api";
+const ruta = "http://localhost/ITABackEnd/api";
 
 const Approved = () => {
 
     const [approveds, setApproveds] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const ruta = "http://localhost/ITABackEnd/public/api";
 
     useEffect(() => {
         getAllApproveds();
     }, []);
 
     const getAllApproveds = async () => {
-        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showApproved');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showApproved',
+        { //acceder con el token
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Accept': 'application/json',
+              'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+            }
+          });
         setApproveds(response.data);
         console.log(response.data);
     };
 
     const deleteApproveds = async (id) => {
-        await axios.post(`${ruta}/workorder_destroy/${id}`, {});
+        await axios.delete(`${ruta}/workorder_destroy/${id}`, {});
         getAllApproveds();
     };
 

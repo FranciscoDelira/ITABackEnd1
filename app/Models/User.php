@@ -28,6 +28,15 @@ class User extends Authenticatable
         return $this->belongsTo(Personaldata::class);
     }
 
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('personal_data_id')->constrained();
+            $table->timestamps();
+        });
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

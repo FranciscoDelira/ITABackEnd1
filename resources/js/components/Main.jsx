@@ -15,10 +15,13 @@ import Earring from "./maintenance/orders/Earring";
 import Release from "./maintenance/orders/Release";
 import Approved from "./maintenance/orders/Approved";
 import NewOrder from "./maintenance/orders/NewOrder";
+import ApproveOrder from "./maintenance/orders/ApproveOrder";
 
 import Profile from "./user/Profile";
 import EditProfile from "./user/EditProfile";
 import Register from "./user/Register";
+import { useLocalStorage } from "react-use";
+import PrivateRoute from "./PrivateRoute";
 
 //import NotFound from './NotFound';
 
@@ -35,75 +38,35 @@ import Register from "./user/Register";
 */
 
 function Main() {
+    const [user, setUser] = useLocalStorage('user-info');
     return (
         <Routes>
-
-            {/*####################################################################
-            ###########################--[ LOGIN ]--#######################################*/}
 
             <Route path="ITABackEnd/public/" element={<Login />} >
                 <Route path="login" element={<Login />} />
             </Route>
 
-            {/*####################################################################
-            ###########################--[ HOME ]--########################################*/}
+            <Route element={<PrivateRoute canActivate={user}
+                redirectPath="ITABackEnd/public/login" />}>
+                <Route path="ITABackEnd/public/" element={<Menu />} >
 
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="home" element={<Home />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
+                    <Route path="home" element={<Home />} />
 
-            {/*####################################################################
-            ##########################--[ REQUESTS ]--########################################*/}
+                    <Route path="activeRequest" element={<ActiveRequests />} />
+                    <Route path="requestHistory" element={<RequestHistory />} />
 
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="activeRequest" element={<ActiveRequests />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="requestHistory" element={<RequestHistory />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
+                    <Route path="earring" element={<Earring />} />
+                    <Route path="release" element={<Release />} />
+                    <Route path="approved" element={<Approved />} />
+                    <Route path="approveOrder" element={<ApproveOrder />} />
+                    <Route path="newOrder/:id" element={<NewOrder />} />
+                    
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="editProfile" element={<EditProfile />} />
+                    <Route path="register" element={<Register />} />
 
-            {/*####################################################################
-            ###########################--[ ORDERS ]--########################################*/}
-
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="earring" element={<Earring />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="release" element={<Release />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="approved" element={<Approved />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route exact path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="newOrder/:id" element={<NewOrder />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-
-            {/*<Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="editOrder/:id" element={<EditOrder />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-
-            {/*####################################################################
-            ###########################--[ USERS ]--########################################*/}
-
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="profile" element={<Profile />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="editProfile" element={<EditProfile />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="ITABackEnd/public/" element={<Menu />} >
-                <Route path="register" element={<Register />} />
-                <Route path="*" element={<Navigate replace to="/" />} />
+                    <Route path="*" element={<Navigate replace to="/" />} />
+                </Route>
             </Route>
 
         </Routes>

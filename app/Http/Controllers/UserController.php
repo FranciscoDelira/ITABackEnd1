@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Personaldata;
-use App\Http\Controllers\PersonalDataController;
 use Illuminate\Support\Facades\Validator; //Import the Validator class
+
 
 class UserController extends Controller
 {
@@ -149,11 +148,9 @@ class UserController extends Controller
 
     
         if(auth()->attempt($credentials)){
-            $user = auth()->user();//Obtener el usuario autenticado
-            $personaldata_id = $user->Personaldata->id; //Obtener el ID de personaldatas asociado al usuario
-            $id = $user->id;
             $token=auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            return response()->json(['token'=>$token, 'status'=>200,'user'=>auth()->user(),'personaldata_id'=>$personaldata_id, 'id' => $user->id]);
+            //return response()->json(['token'=>$token, 'status'=>200,'user'=>auth()->user()]); SE QUITO ESTE
+            return [$token, auth()->user()];
         }else{
             return response()->json(['error' => 'Unauthorised','status'=>401], 401);
         }
@@ -190,7 +187,18 @@ class UserController extends Controller
         ]);
 
         $token = $user->createToken('LaravelAuthApp')->accessToken;
-        return response()->json(['token'=>$token],200);
+        //return response()->json(['token'=>$token],200); SE QUITO ESTE
+        return [$token, $user];
     }
     
+    public function authProfile(){
+        auth()->user()->email;
+        auth()->user()->role;
+        auth()->id();
+        auth()->user()->personaldata_id->name;
+        auth()->user()->personaldata_id->lastname;
+        auth()->user()->personaldata_id->area;
+        auth()->user()->personaldata_id->plantel;   
+    }
+
 }

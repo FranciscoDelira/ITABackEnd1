@@ -16,56 +16,59 @@ import { Link } from "react-router-dom";
 const Release = () => {
 
     const [releases, setReleases] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    //const [id, setID] = useState("");
-
-    /*const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-
-
-        formData.append('id', id)
-        console.log(id)
-
-
-
-        axios.post('http://localhost/ITAFrontEndWeb/public/api/workorder_showApproved', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
-            }
-        })
-            .catch((error) => {
-                console.log(error);
-            });
-    }*/
+    /*const [searchTerm, setSearchTerm] = useState("");
+    const [workOrders, setWorkOrders] = useState([]);*/
 
     useEffect(() => {
         getAllReleases();
     }, [])
 
     const getAllReleases = async () => {
-
-
-
-        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showRelease');
+        const response = await axios.get('http://localhost/ITABackEnd/public/api/workorder_showRelease',
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('user-info')}`
+                }
+            });
         setReleases(response.data);
         console.log(response.data);
-
     }
+    
+    const deleteRelease = async (id) => {
+        await axios.post(`${ruta}/workorder_destroy/${id}`, {});
+        getAllReleases();
+    }
+    /*
+    useEffect(() => {
+        fetchWorkOrders();
+    }, []);
 
-    /*const filteredReleases = releases.filter((release) => {
-        if (searchTerm === "") {
-            return release;
-        } else if (
-            release.maintenanceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            release.serviceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            release.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            release.jobDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            release.status.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-            return release;
+    const fetchWorkOrders = async () => {
+        try {
+            const response = await axios.get('/api/workorders');
+            setWorkOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching work orders:', error);
         }
-    });*/
+    };
+
+    const handleApproval = async (id) => {
+        try {
+            const response = await axios.patch(`/api/workorders/${id}`, { approved: 1 });
+            setWorkOrders(prevWorkOrders =>
+                prevWorkOrders.map(order =>
+                    order.id === workOrderId ? { ...order, approved: response.data.approved } : order
+                )
+            );
+        } catch (error) {
+            console.error('Error updating work order:', error);
+        }
+    };
+*/
+
+    
 
     return (
         <>
@@ -125,30 +128,28 @@ const Release = () => {
                             <td> {release.id} </td>
                             <td> {release.maintenanceType} </td>
                             <td> {release.serviceType} </td>
-                            <td> {release.employeeName} </td>
+                            <td> {release.name} </td>
                             <td> {release.maintenanceDate} </td>
                             <td> {release.jobDescription} </td>
                             <td> <img src={release.evidence1} alt="signature" width={100} height={100} /> </td>
                             <td> <img src={release.evidence2} alt="signature" width={100} height={100} /> </td>
                             <td> <img src={release.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {release.status} </td>
-                            <td> {/*<Button
-                                onClick={() => {
-                                    setID({id: release.id});
-                                    handleSubmit();
-                                    }}
-                                className="btn btn-warning"
-                            >
-                                Aprobar
-                            </Button>*/}
-                                <Link
-                                    to={`http://localhost/ITAFrontEndWeb/public/approved`}
+                            <td>
+                                {/*<Link
+                                    to={`http://localhost/ITABackEnd/public/approved`}
                                     className="btn btn-warning"
                                 >
                                     Aprobar
-                                </Link>
+                                </Link>*/}
+                                
+                                <Button as={Link} to='http://localhost/ITABackEnd/public/approveOrder' >
+                                    Aprobar
+                                </Button>
+
+
                                 <Button
-                                    onClick={() => deleteApproveds(release.id)}
+                                    onClick={() => deleteRelease(release.id)}
                                     className="btn btn-danger"
                                 >
                                     Eliminar
